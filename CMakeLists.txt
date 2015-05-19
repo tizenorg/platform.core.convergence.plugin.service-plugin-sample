@@ -1,0 +1,40 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+PROJECT(service-plugin-sample)
+
+SET(SERVICE-PLUGIN-SAMPLE org.tizen.service-plugin-sample)
+SET(SERVICE-PLUGIN-SAMPLE-BIN service-plugin-sample)
+
+SET(SRCS
+	src/service_plugin_sample.c
+)
+
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}
+${CMAKE_CURRENT_SOURCE_DIR}/include/
+)
+
+INCLUDE(FindPkgConfig)
+pkg_check_modules(pkgs REQUIRED
+	capi-system-system-settings
+	elementary
+	efl-extension
+	evas
+#	ecore-x
+	ecore
+	ecore-input
+	capi-appfw-application
+	dlog
+)
+
+FOREACH(flag ${pkgs_CFLAGS})
+	SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} ${flag} -fpie")
+ENDFOREACH(flag)
+
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS}")
+
+ADD_EXECUTABLE(${SERVICE-PLUGIN-SAMPLE-BIN} ${SRCS})
+TARGET_LINK_LIBRARIES(${SERVICE-PLUGIN-SAMPLE-BIN} ${pkgs_LDFLAGS} "-pie")
+INSTALL(TARGETS ${SERVICE-PLUGIN-SAMPLE-BIN} DESTINATION /opt/usr/apps/${SERVICE-PLUGIN-SAMPLE}/bin)
+
+INSTALL(FILES ${CMAKE_SOURCE_DIR}/${SERVICE-PLUGIN-SAMPLE}.xml DESTINATION /opt/share/packages)
+INSTALL(FILES ${CMAKE_SOURCE_DIR}/${SERVICE-PLUGIN-SAMPLE}.png DESTINATION /opt/share/icons/default/small)
+INSTALL(FILES ${CMAKE_SOURCE_DIR}/${SERVICE-PLUGIN-SAMPLE}.rule DESTINATION /etc/smack/accesses2.d)

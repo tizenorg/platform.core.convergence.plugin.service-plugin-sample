@@ -1,0 +1,2 @@
+org.tizen.service-plugin-sample device::app_logging w
+org.tizen.service-plugin-sample app.default include

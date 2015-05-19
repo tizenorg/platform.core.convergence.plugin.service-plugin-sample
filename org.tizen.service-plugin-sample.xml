@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns="http://tizen.org/ns/packages" package="org.tizen.service-plugin-sample" version="0.1.0" install-location="internal-only">
+	<label>service plugin sample</label>
+	<author email="samsung.kim@samsung.com" href="www.samsung.com">Samsung Kim</author>
+	<description>helloworld</description>
+	<ui-application appid="org.tizen.service-plugin-sample" exec="/opt/usr/apps/org.tizen.service-plugin-sample/bin/service-plugin-sample" nodisplay="false" multiple="false" type="capp" taskmanage="true">
+		<icon>org.tizen.service-plugin-sample.png</icon>
+		<label>service plugin sample</label>
+		<label xml:lang="en-us">plugin sample</label>
+		<label xml:lang="ko-kr">plugin sample</label>
+		<app-control>
+			<operation name="http://tizen.org/appcontrol/operation/sa/new"/>
+		</app-control>
+		<metadata key="service-adaptor" value="1001"/>
+	</ui-application>
+	<account>
+		<account-provider appid="org.tizen.service-plugin-sample" multiple-accounts-support="true" providerid="plugin sample">
+			<icon section="account">org.tizen.service-plugin-sample.png</icon>
+			<icon section="account-small">org.tizen.service-plugin-sample.png</icon>
+			<label>plugin sample</label>
+			<capability>http://tizen.org/account/capability/sa</capability>
+		</account-provider>
+	</account>
+</manifest>

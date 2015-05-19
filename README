@@ -1,0 +1,7 @@
+Install
+# pkgcmd -i -t rpm -p org.tizen.service-plugin-sample-0.1.6-1.armv7l.rpm -q
+
+Revision List
+1) add edc
+2) delete icon
+3) add DBus method (this is using app control)
