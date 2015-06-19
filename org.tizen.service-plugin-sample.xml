@@ -8,10 +8,7 @@
 		<label>service plugin sample</label>
 		<label xml:lang="en-us">plugin sample</label>
 		<label xml:lang="ko-kr">plugin sample</label>
-		<app-control>
-			<operation name="http://tizen.org/appcontrol/operation/sa/new"/>
-		</app-control>
-		<metadata key="service-adaptor" value="1001"/>
+		<metadata key="service-adaptor" value="service plugin sample"/>
 	</ui-application>
 	<account>
 		<account-provider appid="org.tizen.service-plugin-sample" multiple-accounts-support="true" providerid="plugin sample">

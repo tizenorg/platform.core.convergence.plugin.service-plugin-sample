@@ -18,11 +18,11 @@ pkg_check_modules(pkgs REQUIRED
 	elementary
 	efl-extension
 	evas
-#	ecore-x
 	ecore
 	ecore-input
 	capi-appfw-application
 	dlog
+	service-adaptor
 )
 
 FOREACH(flag ${pkgs_CFLAGS})
@@ -30,6 +30,9 @@ FOREACH(flag ${pkgs_CFLAGS})
 ENDFOREACH(flag)
 
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS}")
+
+ADD_DEFINITIONS("-DSERVICE_ADAPTOR_DEBUGGING")
+ADD_DEFINITIONS("-D_SERVICE_ADAPTOR_IPC_CLIENT")
 
 ADD_EXECUTABLE(${SERVICE-PLUGIN-SAMPLE-BIN} ${SRCS})
 TARGET_LINK_LIBRARIES(${SERVICE-PLUGIN-SAMPLE-BIN} ${pkgs_LDFLAGS} "-pie")

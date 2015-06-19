@@ -14,6 +14,7 @@
 		<smack request="system::media" type="rwxat" />
 		<smack request="system::share" type="rwxat" />
 		<smack request="xorg" type="w" />
+		<smack request="service-adaptor" type="rw" />
 	 </request>
 	</define>
 	<assign>

@@ -12,11 +12,12 @@ BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(efl-extension)
 BuildRequires:  pkgconfig(appcore-efl)
 BuildRequires:  pkgconfig(dlog)
-BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(appsvc)
 BuildRequires:  pkgconfig(capi-appfw-application)
+BuildRequires:  pkgconfig(service-adaptor)
 BuildRequires:  cmake
 BuildRequires:  edje-bin
+#BuildRequires:  service-adaptor-devel
 
 %description
 plugin sample
