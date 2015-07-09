@@ -48,12 +48,10 @@ rm -rf %{buildroot}
 %make_install
 
 %post
-cp /opt/share/applications/org.tizen.service-plugin-sample.desktop /opt/share/
-cp -f /opt/share/org.tizen.service-plugin-sample.desktop /opt/share/applications/
 
 %files
 %manifest org.tizen.service-plugin-sample.manifest
-/opt/usr/apps/org.tizen.service-plugin-sample/*
-/opt/share/packages/org.tizen.service-plugin-sample.xml
-/opt/share/icons/default/small/org.tizen.service-plugin-sample.png
+/usr/apps/org.tizen.service-plugin-sample/*
+/usr/share/packages/org.tizen.service-plugin-sample.xml
+/usr/share/icons/default/small/org.tizen.service-plugin-sample.png
 /etc/smack/accesses2.d/org.tizen.service-plugin-sample.rule
