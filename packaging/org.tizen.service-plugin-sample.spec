@@ -7,16 +7,19 @@ License:    Apache-2.0
 Source0:    %{name}-%{version}.tar.gz
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
+BuildRequires:  pkgconfig(appcore-agent)
 BuildRequires:  pkgconfig(capi-system-system-settings)
-BuildRequires:  pkgconfig(glib-2.0)
-BuildRequires:  pkgconfig(efl-extension)
-BuildRequires:  pkgconfig(appcore-efl)
-BuildRequires:  pkgconfig(dlog)
-BuildRequires:  pkgconfig(appsvc)
 BuildRequires:  pkgconfig(capi-appfw-application)
+BuildRequires:  pkgconfig(capi-appfw-package-manager)
+BuildRequires:  pkgconfig(capi-appfw-service-application)
+BuildRequires:  pkgconfig(efl-extension)
+BuildRequires:  pkgconfig(appcore-agent)
+BuildRequires:  pkgconfig(eina)
+BuildRequires:  pkgconfig(ecore)
+BuildRequires:  pkgconfig(dlog)
+BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(service-adaptor)
 BuildRequires:  cmake
-BuildRequires:  edje-bin
 #BuildRequires:  service-adaptor-devel
 
 %description

@@ -14,13 +14,10 @@ ${CMAKE_CURRENT_SOURCE_DIR}/include/
 
 INCLUDE(FindPkgConfig)
 pkg_check_modules(pkgs REQUIRED
-	capi-system-system-settings
-	elementary
-	efl-extension
-	evas
+	appcore-agent
+	aul
+	eina
 	ecore
-	ecore-input
-	capi-appfw-application
 	dlog
 	service-adaptor
 )
