@@ -57,4 +57,3 @@ rm -rf %{buildroot}
 /usr/apps/org.tizen.service-plugin-sample/*
 /usr/share/packages/org.tizen.service-plugin-sample.xml
 /usr/share/icons/default/small/org.tizen.service-plugin-sample.png
-/etc/smack/accesses2.d/org.tizen.service-plugin-sample.rule

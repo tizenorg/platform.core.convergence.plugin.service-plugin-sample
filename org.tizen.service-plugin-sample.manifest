@@ -1,23 +1,5 @@
 <manifest>
-	<define>
-		<domain name="org.tizen.service-plugin-sample" />
-	 <permit>
-	  <smack permit="com.samsung.app-tray" type="rwx" />
-	  <smack permit="e17" type="rwx" />
-	 </permit>
-	 <request>
-		<smack request="dbus" type="r" />
-		<smack request="ail::db" type="rw" />
-		<smack request="system::vconf" type="rwxat" />
-		<smack request="com.samsung.indicator" type="rw" />
-		<smack request="system::homedir" type="rwxat" />
-		<smack request="system::media" type="rwxat" />
-		<smack request="system::share" type="rwxat" />
-		<smack request="xorg" type="w" />
-		<smack request="service-adaptor" type="rw" />
-	 </request>
-	</define>
-	<assign>
-	 <filesystem path="/opt/share/icons/default/small/org.tizen.service-plugin-sample.png" label="_" />
-	</assign>
+	<request>
+		<domain name="_" />
+	</request>
 </manifest>
