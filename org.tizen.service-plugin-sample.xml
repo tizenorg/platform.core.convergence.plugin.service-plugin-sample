@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns="http://tizen.org/ns/packages" package="org.tizen.service-plugin-sample" version="0.1.0" install-location="internal-only">
+<manifest xmlns="http://tizen.org/ns/packages" package="org.tizen.service-plugin-sample" api-version="3.0" version="0.1.0" install-location="internal-only">
 	<label>service plugin sample</label>
 	<author email="samsung.kim@samsung.com" href="www.samsung.com">Samsung Kim</author>
 	<description>helloworld</description>
