@@ -42,13 +42,15 @@ export CXXFLAGS="$CXXFLAGS -DTIZEN_ENGINEER_MODE"
 export FFLAGS="$FFLAGS -DTIZEN_ENGINEER_MODE"
 %endif
 
-cmake . -DCMAKE_INSTALL_PREFIX=/usr
+cmake . -DCMAKE_INSTALL_PREFIX=/usr -DLIB_INSTALL_DIR:PATH=%{_libdir}
 
 make %{?jobs:-j%jobs}
 
 %install
 rm -rf %{buildroot}
 %make_install
+
+mkdir -p %{buildroot}%{_libdir}/service-provider/auth
 
 %post
 
@@ -57,3 +59,5 @@ rm -rf %{buildroot}
 /usr/apps/org.tizen.service-plugin-sample/*
 /usr/share/packages/org.tizen.service-plugin-sample.xml
 /usr/share/icons/default/small/org.tizen.service-plugin-sample.png
+%{_libdir}/service-provider/auth/*.so
+%{_libdir}/service-provider/storage/*.so

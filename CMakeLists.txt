@@ -12,6 +12,9 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}
 ${CMAKE_CURRENT_SOURCE_DIR}/include/
 )
 
+ADD_SUBDIRECTORY(auth-plugin)
+ADD_SUBDIRECTORY(storage-plugin)
+
 INCLUDE(FindPkgConfig)
 pkg_check_modules(pkgs REQUIRED
 	appcore-agent
@@ -20,6 +23,7 @@ pkg_check_modules(pkgs REQUIRED
 	ecore
 	dlog
 	service-adaptor
+	capi-appfw-service-application
 )
 
 FOREACH(flag ${pkgs_CFLAGS})

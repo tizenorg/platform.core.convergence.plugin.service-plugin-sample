@@ -18,39 +18,6 @@
 #include <dlog.h>
 
 #include "service_plugin_sample.h"
-#include "service_provider.h"
-
-service_provider_h service_provider = NULL;
-
-service_adaptor_error_e _connect()
-{
-	SLOGI("connect");
-
-	return SERVICE_ADAPTOR_ERROR_NONE;
-}
-
-service_adaptor_error_e _disconnect()
-{
-	SLOGI("disconnect");
-
-	return SERVICE_ADAPTOR_ERROR_NONE;
-}
-
-service_adaptor_error_e _oauth1_get_access_token(char **access_token)
-{
-	SLOGI("oauth1_get_access_token");
-
-	*access_token = strdup("test");
-
-	return SERVICE_ADAPTOR_ERROR_NONE;
-}
-
-service_adaptor_error_e _cloud_remove_file(const char *cloud_path)
-{
-	SLOGI("cloud_remove_file: %s", cloud_path);
-
-	return SERVICE_ADAPTOR_ERROR_NONE;
-}
 
 static bool service_app_create(void *data)
 {
@@ -62,7 +29,6 @@ static void service_app_control(app_control_h app_control, void *data)
 	SLOGI("app_control");
 
 	/* Handle the launch request. */
-	service_provider_message(service_provider, app_control, data);
 }
 
 static void service_app_terminate(void *data)
@@ -102,24 +68,6 @@ int main(int argc, char *argv[])
 	char ad[50] = {0,};
 	int ret = 0;
 
-	/*Service Plugin Client*/
-	service_provider_create(&service_provider);
-	service_provider->connect = _connect;
-	service_provider->disconnect = _disconnect;
-
-	auth_provider_h auth_provider = NULL;
-	auth_provider_create(&auth_provider);
-	auth_provider->oauth1_get_access_token = _oauth1_get_access_token;
-
-	service_provider_set_auth_provider(service_provider, auth_provider);
-
-	storage_provider_h storage_provider = NULL;
-	storage_provider_create(&storage_provider);
-	storage_provider->cloud_remove_file = _cloud_remove_file;
-
-	service_provider_set_storage_provider(service_provider, storage_provider);
-	/*Service Plugin Client*/
-
 	service_app_lifecycle_callback_s event_callback = {0,};
 	app_event_handler_h handlers[5] = {NULL, };
 
@@ -138,10 +86,6 @@ int main(int argc, char *argv[])
 	{
 		SLOGE(LOG_TAG, "app_main() is failed. err = %d", ret);
 	}
-
-	service_provider_unset_auth_provider(service_provider);
-	service_provider_unset_storage_provider(service_provider);
-	service_provider_destroy(service_provider);
 
 	return ret;
 }
