@@ -3,13 +3,13 @@
 	<label>service plugin sample</label>
 	<author email="samsung.kim@samsung.com" href="www.samsung.com">Samsung Kim</author>
 	<description>helloworld</description>
-	<ui-application appid="org.tizen.service-plugin-sample" exec="/usr/apps/org.tizen.service-plugin-sample/bin/service-plugin-sample" nodisplay="true" multiple="false" type="capp" taskmanage="false">
+	<service-application appid="org.tizen.service-plugin-sample" exec="/usr/apps/org.tizen.service-plugin-sample/bin/service-plugin-sample" nodisplay="true" multiple="false" type="capp" taskmanage="false">
 		<icon>org.tizen.service-plugin-sample.png</icon>
 		<label>service plugin sample</label>
 		<label xml:lang="en-us">plugin sample</label>
 		<label xml:lang="ko-kr">plugin sample</label>
 		<metadata key="service-adaptor" value="service plugin sample"/>
-	</ui-application>
+	</service-application>
 	<account>
 		<account-provider appid="org.tizen.service-plugin-sample" multiple-accounts-support="true" providerid="plugin sample">
 			<icon section="account">org.tizen.service-plugin-sample.png</icon>
