@@ -83,9 +83,7 @@ int main(int argc, char *argv[])
 
 	ret = service_app_main(argc, argv, &event_callback, &ad);
 	if (ret != APP_ERROR_NONE)
-	{
 		SLOGE(LOG_TAG, "app_main() is failed. err = %d", ret);
-	}
 
 	return ret;
 }

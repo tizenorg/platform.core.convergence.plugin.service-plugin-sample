@@ -16,7 +16,7 @@
  *
  */
 
-// System header
+/* System header */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -31,15 +31,14 @@
 #include <storage-adaptor.h>
 #include "storage-plugin-sample-log.h"
 
-// 3rd
+/* 3rd */
 #include <glib.h>
 
 #define SAMPLE_PACKAGE_NAME		"org.tizen.service-plugin-sample"
 #define VIRTUAL_ROOT_PATH_BASE	"/tmp/service-plugin-sample/"
 #define VIRTUAL_ROOT_PATH(context)	((char *)context->plugin_data)
 
-typedef struct async_job
-{
+typedef struct async_job {
 	int fd;
 	storage_adaptor_transfer_state_e state;
 	char *local_path;
@@ -132,12 +131,12 @@ static storage_adaptor_file_info_h create_chunk_file_info(storage_adaptor_plugin
 	return _file_info;
 }
 
-static char *create_virtual_area(char *app_id)
+static char *create_virtual_area(const char *app_id)
 {
 	mkdir(VIRTUAL_ROOT_PATH_BASE, S_IRWXU|S_IRWXG|S_IRWXO);
 	storage_plugin_sample_debug("Make root base path");
 
-	char *subdir = "";
+	const char *subdir = NULL;
 	if (NULL == app_id)
 		subdir = "public";
 	else if ('\0' == app_id[0])
@@ -187,7 +186,7 @@ storage_error_code_t sample_create_context(storage_adaptor_plugin_context_h *con
 	_context->cid			= strdup(cid ? cid : "");
 	_context->uid			= strdup(uid ? uid : "");
 
-	_context->plugin_data	= (void *)create_virtual_area(app_id ? app_id : "public");
+	_context->plugin_data		= (void *)create_virtual_area(app_id ? app_id : "public");
 
 	*context = _context;
 
@@ -205,20 +204,19 @@ storage_error_code_t sample_destroy_context(storage_adaptor_plugin_context_h con
 {
 	storage_plugin_sample_debug("Destroy sample storage plugin context");
 
-	if (NULL == context)
-	{
+	if (NULL == context) {
 		storage_plugin_sample_error("Invalid argument");
 		return STORAGE_ADAPTOR_ERROR_PLUGIN_INTERNAL;
 	}
 
-	// Free context members
+	/* Free context members */
 	free(context->app_id);
 	free(context->app_secret);
 	free(context->access_token);
 	free(context->cid);
 	free(context->uid);
 
-	// Free context
+	/* Free context */
 	free(context);
 
 	return STORAGE_ADAPTOR_ERROR_NONE;
@@ -235,8 +233,7 @@ storage_error_code_t sample_destroy_plugin_handle(storage_adaptor_plugin_handle_
 {
 	storage_plugin_sample_debug("Destroy sample storage plugin handle");
 
-	if (NULL == handle)
-	{
+	if (NULL == handle) {
 		storage_plugin_sample_error("Invalid argument");
 		return STORAGE_ADAPTOR_ERROR_PLUGIN_INTERNAL;
 	}
@@ -287,8 +284,7 @@ storage_error_code_t sample_register_listener(storage_adaptor_plugin_listener_h 
 {
 	storage_plugin_sample_debug("Set sample storage plugin listener");
 
-	if (NULL != listener)
-	{
+	if (NULL != listener) {
 		sample_progress_reply = listener->storage_adaptor_task_progress_reply;
 		sample_upload_reply = listener->storage_adaptor_upload_state_changed_reply;
 		sample_download_reply = listener->storage_adaptor_download_state_changed_reply;
@@ -360,20 +356,17 @@ storage_error_code_t sample_make_directory(storage_adaptor_plugin_context_h cont
 	if (0 == strncmp(VIRTUAL_ROOT_PATH(context), parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
 		path = g_strconcat(VIRTUAL_ROOT_PATH(context), folder_name, NULL);
 	else
-		path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path?parent_path:"", "/", folder_name, NULL);
+		path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path ? parent_path : "", "/", folder_name, NULL);
 	storage_plugin_sample_debug("Make path (%s)", path);
 	int ret = mkdir(path, 0777);
 	storage_plugin_sample_debug("Make path (%d)", ret);
 
-	if (0 == ret)
-	{
+	if (0 == ret) {
 
 		storage_adaptor_file_info_h _file_info = create_chunk_file_info(context, STORAGE_ADAPTOR_CONTENT_TYPE_FOLDER, path);
 
 		*file_info = _file_info;
-	}
-	else
-	{
+	} else {
 		ret = STORAGE_ADAPTOR_ERROR_PLUGIN_INTERNAL;
 	}
 
@@ -409,19 +402,16 @@ storage_error_code_t sample_remove_directory(storage_adaptor_plugin_context_h co
 	if (0 == strncmp(VIRTUAL_ROOT_PATH(context), parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
 		path = g_strconcat(VIRTUAL_ROOT_PATH(context), folder_name, NULL);
 	else
-		path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path?parent_path:"", "/", folder_name, NULL);
+		path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path ? parent_path : "", "/", folder_name, NULL);
 	storage_plugin_sample_debug("Remove path (%s)", path);
 	int ret = remove(path);
 	storage_plugin_sample_debug("Remove ret (%d)", ret);
 
-	if (0 == ret)
-	{
+	if (0 == ret) {
 		storage_adaptor_file_info_h _file_info = create_chunk_file_info(context, STORAGE_ADAPTOR_CONTENT_TYPE_FOLDER, path);
 
 		*file_info = _file_info;
-	}
-	else
-	{
+	} else {
 		ret = STORAGE_ADAPTOR_ERROR_PLUGIN_INTERNAL;
 	}
 
@@ -438,7 +428,7 @@ char *replace_path_str(char *original)
 
 	char *temp1 = NULL, *temp2 = NULL;
 
-	while(NULL != (pt = strstr(base, slash))) {
+	while (NULL != (pt = strstr(base, slash))) {
 		temp1 = strndup(base, strlen(base) - strlen(pt));
 		temp2 = strndup(pt + 1, strlen(pt) - 1);
 		free(base);
@@ -475,9 +465,8 @@ storage_error_code_t sample_get_list(storage_adaptor_plugin_context_h context,
 						void *response)
 {
 	storage_plugin_sample_debug("Get list information");
-	if ((NULL == file_list) || (NULL == file_list_len)) {
+	if ((NULL == file_list) || (NULL == file_list_len))
 		return STORAGE_ADAPTOR_ERROR_INVALID_ARGUMENT;
-	}
 
 	storage_plugin_sample_debug("parent_path (%s) folder_name(%s)", parent_path, folder_name);
 
@@ -485,7 +474,7 @@ storage_error_code_t sample_get_list(storage_adaptor_plugin_context_h context,
 	if (0 == strncmp(VIRTUAL_ROOT_PATH(context), parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
 		path = g_strconcat(VIRTUAL_ROOT_PATH(context), folder_name, NULL);
 	else
-		path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path?parent_path:"", "/", folder_name, NULL);
+		path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path ? parent_path : "", "/", folder_name, NULL);
 
 	storage_plugin_sample_debug("gets path (%s)", path);
 
@@ -502,22 +491,20 @@ storage_error_code_t sample_get_list(storage_adaptor_plugin_context_h context,
 	GList *_file_list = NULL;
 	char *entry_path = NULL;
 	while (0 == readdir_r(dirp, &dent, &result)) {
-		if (NULL == result) {
+		if (NULL == result)
 			break;
-		}
+
 		storage_plugin_sample_debug("===== entry name [%s]", dent.d_name);
 		storage_plugin_sample_debug("entry type [%d]", (int)((unsigned char)dent.d_type));
 
-		if ((0 == strcmp(".", dent.d_name)) || (0 == strcmp("..", dent.d_name))) {
+		if ((0 == strcmp(".", dent.d_name)) || (0 == strcmp("..", dent.d_name)))
 			continue;
-		}
 
 		storage_adaptor_file_info_h file = storage_adaptor_create_file_info();
-		if (4 == (int)((unsigned char)dent.d_type)) {
+		if (4 == (int)((unsigned char)dent.d_type))
 			file->content_type	= STORAGE_ADAPTOR_CONTENT_TYPE_FOLDER;
-		} else {
+		else
 			file->content_type	= STORAGE_ADAPTOR_CONTENT_TYPE_OTHER;
-		}
 
 		entry_path = g_strconcat(path, "/", dent.d_name, NULL);
 		char *temp = replace_path_str(entry_path);
@@ -562,9 +549,8 @@ storage_error_code_t sample_get_list(storage_adaptor_plugin_context_h context,
 	int len = g_list_length(_file_list);
 	if (0 < len) {
 		list = (storage_adaptor_file_info_h *) calloc(len, sizeof(storage_adaptor_file_info_h));
-		for (int i = 0; i < len; i++) {
+		for (int i = 0; i < len; i++)
 			list[i] = (storage_adaptor_file_info_h) g_list_nth_data(_file_list, i);
-		}
 	}
 
 	*file_list = list;
@@ -609,7 +595,7 @@ storage_error_code_t sample_upload_file_sync(storage_adaptor_plugin_context_h co
 	if (0 == strncmp(VIRTUAL_ROOT_PATH(context), dir_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
 		path = g_strconcat(VIRTUAL_ROOT_PATH(context), file_name, NULL);
 	else
-		path = g_strconcat(VIRTUAL_ROOT_PATH(context), dir_path?dir_path:"", "/", file_name, NULL);
+		path = g_strconcat(VIRTUAL_ROOT_PATH(context), dir_path ? dir_path : "", "/", file_name, NULL);
 	storage_plugin_sample_info("dir path: (%s)", dir_path);
 	storage_plugin_sample_info("file name: (%s)", file_name);
 
@@ -628,7 +614,7 @@ storage_error_code_t sample_upload_file_sync(storage_adaptor_plugin_context_h co
 	char buf[1025] = {0, };
 	int len = 0, wlen = 0;
 
-	while (0 < (len = read(src, buf, 1024))){
+	while (0 < (len = read(src, buf, 1024))) {
 		storage_plugin_sample_debug("len(%d) str(%s)", len, buf);
 
 		wlen = write(dst, buf, len);
@@ -677,11 +663,10 @@ storage_error_code_t sample_download_file_sync(storage_adaptor_plugin_context_h 
 	if (0 == strncmp(VIRTUAL_ROOT_PATH(context), dir_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
 		path = g_strconcat(VIRTUAL_ROOT_PATH(context), file_name, NULL);
 	else
-		path = g_strconcat(VIRTUAL_ROOT_PATH(context), dir_path?dir_path:"", "/", file_name, NULL);
+		path = g_strconcat(VIRTUAL_ROOT_PATH(context), dir_path ? dir_path : "", "/", file_name, NULL);
 
 	int src = open(path, O_RDONLY);
-	if (0 > src)
-	{
+	if (0 > src) {
 		free(path);
 		return STORAGE_ADAPTOR_ERROR_PLUGIN_INTERNAL;
 	}
@@ -700,7 +685,7 @@ storage_error_code_t sample_download_file_sync(storage_adaptor_plugin_context_h 
 	char buf[1025] = {0, };
 	int len = 0, wlen = 0;
 
-	while (0 < (len = read(src, buf, 1024))){
+	while (0 < (len = read(src, buf, 1024))) {
 		storage_plugin_sample_debug("len(%d) str(%s)", len, buf);
 
 		wlen = write(dst, buf, len);
@@ -742,19 +727,16 @@ storage_error_code_t sample_delete_file(storage_adaptor_plugin_context_h context
 	if (0 == strncmp(VIRTUAL_ROOT_PATH(context), parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
 		path = g_strconcat(VIRTUAL_ROOT_PATH(context), file_name, NULL);
 	else
-		path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path?parent_path:"", "/", file_name, NULL);
+		path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path ? parent_path : "", "/", file_name, NULL);
 	storage_plugin_sample_debug("Remove path (%s)", path);
 	int ret = remove(path);
 	storage_plugin_sample_debug("Remove ret (%d)", ret);
 
-	if (0 == ret)
-	{
+	if (0 == ret) {
 		storage_adaptor_file_info_h _file_info = create_chunk_file_info(context, STORAGE_ADAPTOR_CONTENT_TYPE_FOLDER, path);
 
 		*file_info = _file_info;
-	}
-	else
-	{
+	} else {
 		ret = STORAGE_ADAPTOR_ERROR_PLUGIN_INTERNAL;
 	}
 
@@ -822,25 +804,22 @@ storage_error_code_t sample_move_file(storage_adaptor_plugin_context_h context,
 	if (0 == strncmp(VIRTUAL_ROOT_PATH(context), parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
 		old_path = g_strconcat(VIRTUAL_ROOT_PATH(context), file_name, NULL);
 	else
-		old_path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path?parent_path:"", "/", file_name, NULL);
+		old_path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path ? parent_path : "", "/", file_name, NULL);
 	storage_plugin_sample_debug("Old path (%s)", old_path);
 
 	if (0 == strncmp(VIRTUAL_ROOT_PATH(context), dest_parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
 		new_path = g_strconcat(VIRTUAL_ROOT_PATH(context), new_file_name, NULL);
 	else
-		new_path = g_strconcat(VIRTUAL_ROOT_PATH(context), dest_parent_path?dest_parent_path:"", "/", new_file_name, NULL);
+		new_path = g_strconcat(VIRTUAL_ROOT_PATH(context), dest_parent_path ? dest_parent_path : "", "/", new_file_name, NULL);
 	storage_plugin_sample_debug("New path (%s)", new_path);
 
 	int ret = rename(old_path, new_path);
 
-	if (0 == ret)
-	{
+	if (0 == ret) {
 		storage_adaptor_file_info_h _file_info = create_chunk_file_info(context, STORAGE_ADAPTOR_CONTENT_TYPE_FOLDER, new_path);
 
 		*file_info = _file_info;
-	}
-	else
-	{
+	} else {
 		ret = STORAGE_ADAPTOR_ERROR_PLUGIN_INTERNAL;
 	}
 
@@ -881,25 +860,22 @@ storage_error_code_t sample_move_directory(storage_adaptor_plugin_context_h cont
 	if (0 == strncmp(VIRTUAL_ROOT_PATH(context), parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
 		old_path = g_strconcat(VIRTUAL_ROOT_PATH(context), folder_name, NULL);
 	else
-		old_path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path?parent_path:"", "/", folder_name, NULL);
+		old_path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path ? parent_path : "", "/", folder_name, NULL);
 	storage_plugin_sample_debug("Old path (%s)", old_path);
 
 	if (0 == strncmp(VIRTUAL_ROOT_PATH(context), dest_parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
 		new_path = g_strconcat(VIRTUAL_ROOT_PATH(context), new_folder_name, NULL);
 	else
-		new_path = g_strconcat(VIRTUAL_ROOT_PATH(context), dest_parent_path?dest_parent_path:"", "/", new_folder_name, NULL);
+		new_path = g_strconcat(VIRTUAL_ROOT_PATH(context), dest_parent_path ? dest_parent_path : "", "/", new_folder_name, NULL);
 	storage_plugin_sample_debug("New path (%s)", new_path);
 
 	int ret = rename(old_path, new_path);
 
-	if (0 == ret)
-	{
+	if (0 == ret) {
 		storage_adaptor_file_info_h _file_info = create_chunk_file_info(context, STORAGE_ADAPTOR_CONTENT_TYPE_FOLDER, new_path);
 
 		*file_info = _file_info;
-	}
-	else
-	{
+	} else {
 		ret = STORAGE_ADAPTOR_ERROR_PLUGIN_INTERNAL;
 	}
 
@@ -910,12 +886,12 @@ storage_error_code_t sample_move_directory(storage_adaptor_plugin_context_h cont
 }
 
 storage_error_code_t sample_get_root(storage_adaptor_plugin_context_h context,
-                                                        void *request,
-                                                        char **root_folder_path,
-                                                        storage_adaptor_error_code_h *error,
-                                                        void *response)
+							void *request,
+							char **root_folder_path,
+							storage_adaptor_error_code_h *error,
+							void *response)
 {
-	//*root_folder_path = strdup(VIRTUAL_ROOT_PATH(context));
+	/* *root_folder_path = strdup(VIRTUAL_ROOT_PATH(context)); */
 	*root_folder_path = strdup("/");
 
 	return 0;
@@ -945,18 +921,17 @@ void *_async_uploader(void *data)
 		it delay to download/upload speed, so it can simulate delay of real network environment. */
 	int sleep_sec = 0;
 	int usleep_sec = 0;
-	if (total < 5000ULL) {
+	if (total < 5000ULL)
 		sleep_sec = 1;
-	} else if (total < 10240ULL) {
+	else if (total < 10240ULL)
 		usleep_sec = 500000;
-	} else if (total < 100000ULL){
+	else if (total < 100000ULL)
 		usleep_sec = 100000;
-	} else {
+	else
 		usleep_sec = 1000;
-	}
 
 	sample_upload_cb(fd, STORAGE_ADAPTOR_TRANSFER_STATE_IN_PROGRESS, NULL, NULL, NULL);
-	while (0 < (len = read(fd, buf, 1024))){
+	while (0 < (len = read(fd, buf, 1024))) {
 		storage_plugin_sample_debug("len(%d) str(%s)", len, buf);
 
 		wlen = write(dst, buf, len);
@@ -1003,7 +978,7 @@ storage_error_code_t sample_upload_async(storage_adaptor_plugin_context_h contex
 	async_job_t *plugin_task = create_job_s(src_file_descriptor);
 
 	char *path = NULL;
-	path = g_strconcat(VIRTUAL_ROOT_PATH(context), dir_path?dir_path:"", "/", file_name, NULL);
+	path = g_strconcat(VIRTUAL_ROOT_PATH(context), dir_path ? dir_path : "", "/", file_name, NULL);
 	plugin_task->cloud_path = path;
 	storage_plugin_sample_debug("cloud_path (%s)", path);
 
@@ -1036,18 +1011,17 @@ void *_async_downloader(void *data)
 		it delay to download/upload speed, so it can simulate delay of real network environment. */
 	int sleep_sec = 0;
 	int usleep_sec = 0;
-	if (total < 5000ULL) {
+	if (total < 5000ULL)
 		sleep_sec = 1;
-	} else if (total < 10240ULL) {
+	else if (total < 10240ULL)
 		usleep_sec = 500000;
-	} else if (total < 100000ULL){
+	else if (total < 100000ULL)
 		usleep_sec = 100000;
-	} else {
+	else
 		usleep_sec = 1000;
-	}
 
 	sample_download_cb(fd, STORAGE_ADAPTOR_TRANSFER_STATE_IN_PROGRESS, NULL, NULL);
-	while (0 < (len = read(src, buf, 1024))){
+	while (0 < (len = read(src, buf, 1024))) {
 		storage_plugin_sample_debug("len(%d) str(%s)", len, buf);
 
 		wlen = write(fd, buf, len);
@@ -1093,7 +1067,7 @@ storage_error_code_t sample_download_async(storage_adaptor_plugin_context_h cont
 	async_job_t *plugin_task = create_job_s(dst_file_descriptor);
 
 	char *path = NULL;
-	path = g_strconcat(VIRTUAL_ROOT_PATH(context), dir_path?dir_path:"", "/", file_name, NULL);
+	path = g_strconcat(VIRTUAL_ROOT_PATH(context), dir_path ? dir_path : "", "/", file_name, NULL);
 	plugin_task->cloud_path = path;
 
 	pthread_create(&th, NULL, _async_downloader, (void *)plugin_task);
@@ -1115,7 +1089,7 @@ storage_error_code_t sample_download_thumbnail_async(storage_adaptor_plugin_cont
 	async_job_t *plugin_task = create_job_s(dst_file_descriptor);
 
 	char *path = NULL;
-	path = g_strconcat(VIRTUAL_ROOT_PATH(context), dir_path?dir_path:"", "/", file_name, NULL);
+	path = g_strconcat(VIRTUAL_ROOT_PATH(context), dir_path ? dir_path : "", "/", file_name, NULL);
 	plugin_task->cloud_path = path;
 
 	pthread_create(&th, NULL, _async_downloader, (void *)plugin_task);
@@ -1171,11 +1145,10 @@ storage_error_code_t sample_download_thumbnail(storage_adaptor_plugin_context_h 
 	if (0 == strncmp(VIRTUAL_ROOT_PATH(context), folder_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
 		path = g_strconcat(VIRTUAL_ROOT_PATH(context), file_name, NULL);
 	else
-		path = g_strconcat(VIRTUAL_ROOT_PATH(context), folder_path?folder_path:"", "/", file_name, NULL);
+		path = g_strconcat(VIRTUAL_ROOT_PATH(context), folder_path ? folder_path : "", "/", file_name, NULL);
 
 	int src = open(path, O_RDONLY);
-	if (0 > src)
-	{
+	if (0 > src) {
 		free(path);
 		return STORAGE_ADAPTOR_ERROR_PLUGIN_INTERNAL;
 	}
@@ -1194,7 +1167,7 @@ storage_error_code_t sample_download_thumbnail(storage_adaptor_plugin_context_h 
 	char buf[1025] = {0, };
 	int len = 0, wlen = 0;
 
-	while (0 < (len = read(src, buf, 1024))){
+	while (0 < (len = read(src, buf, 1024))) {
 		storage_plugin_sample_debug("len(%d) str(%s)", len, buf);
 
 		wlen = write(dst, buf, len);
@@ -1222,43 +1195,42 @@ EXPORT_API storage_adaptor_plugin_handle_h create_plugin_handle(void)
 	storage_adaptor_plugin_handle_h handle =
 			(storage_adaptor_plugin_handle_h) calloc(1, sizeof(storage_adaptor_plugin_handle_t));
 
-	if (NULL == handle)
-	{
+	if (NULL == handle) {
 		storage_plugin_sample_error("Memory allocation failed");
 		return NULL;
 	}
 
-	// Mandatory functions
+	/* Mandatory functions */
 	handle->create_context				= sample_create_context;
 	handle->destroy_context				= sample_destroy_context;
 	handle->destroy_handle				= sample_destroy_plugin_handle;
 	handle->set_listener				= sample_register_listener;
 	handle->unset_listener				= sample_unregister_listener;
 
-	// Optional functions
-	// Uified Storage System internal
-	handle->get_root_folder_path		= sample_get_root;
+	/* Optional functions */
+	/* Uified Storage System internal */
+	handle->get_root_folder_path			= sample_get_root;
 	handle->set_server_info				= sample_set_server_info;
 	handle->make_directory				= sample_make_directory;
 	handle->remove_directory			= sample_remove_directory;
 	handle->upload_file_sync			= sample_upload_file_sync;
 	handle->download_file_sync			= sample_download_file_sync;
-	handle->delete_file					= sample_delete_file;
-	handle->move_file					= sample_move_file;
+	handle->delete_file				= sample_delete_file;
+	handle->move_file				= sample_move_file;
 	handle->move_directory				= sample_move_directory;
 
-	// Public
-	handle->list						= sample_get_list;
+	/* Public */
+	handle->list					= sample_get_list;
 	handle->start_upload_task			= sample_upload_async;
 	handle->start_download_task			= sample_download_async;
-	handle->start_download_thumb_task	= sample_download_thumbnail_async;
+	handle->start_download_thumb_task		= sample_download_thumbnail_async;
 	handle->cancel_upload_task			= sample_cancel_upload_file;
-	handle->cancel_download_task		= sample_cancel_download_file;
-	handle->cancel_download_thumb_task	= sample_cancel_download_thumbnail;
+	handle->cancel_download_task			= sample_cancel_download_file;
+	handle->cancel_download_thumb_task		= sample_cancel_download_thumbnail;
 
 	handle->download_thumbnail			= sample_download_thumbnail;
 
-	// Plugin name
+	/* Plugin name */
 	handle->plugin_uri = strdup(SAMPLE_PACKAGE_NAME);
 
 	return handle;

@@ -16,16 +16,16 @@
  *
  */
 
-// System
+/* System */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-// 3rd Party
+/* 3rd Party */
 #include <glib.h>
 #include <bundle.h>
 
-// Auth Plugin
+/* Auth Plugin */
 #include <auth-adaptor.h>
 #include "auth-plugin-sample-log.h"
 
@@ -52,11 +52,11 @@ auth_error_code_t sample_create_context(auth_adaptor_plugin_context_h *context,
 
 	auth_adaptor_plugin_context_h _context = (auth_adaptor_plugin_context_h) calloc(1, sizeof(auth_adaptor_plugin_context_t));
 
-	_context->user_id       = strdup(user_id?user_id:"");
-	_context->user_password = strdup(user_password?user_password:"");
-	_context->app_id        = strdup(app_id?app_id:"");
-	_context->app_secret    = strdup(app_secret?app_secret:"");
-	_context->imsi		= strdup(imsi?imsi:"");
+	_context->user_id       = strdup(user_id ? user_id : "");
+	_context->user_password = strdup(user_password ? user_password : "");
+	_context->app_id        = strdup(app_id ? app_id : "");
+	_context->app_secret    = strdup(app_secret ? app_secret : "");
+	_context->imsi		= strdup(imsi ? imsi : "");
 
 	_context->plugin_data = NULL;
 
@@ -81,13 +81,12 @@ auth_error_code_t sample_destroy_context(auth_adaptor_plugin_context_h context)
 {
 	auth_plugin_sample_debug("Destroy sample auth plugin context");
 
-	if (NULL == context)
-	{
+	if (NULL == context) {
 		auth_plugin_sample_error("Invalid argument");
 		return AUTH_ADAPTOR_ERROR_PLUGIN_INTERNAL;
 	}
 
-	// Free context members
+	/* Free context members */
 	free(context->app_id);
 	free(context->app_secret);
 	free(context->user_id);
@@ -100,7 +99,7 @@ auth_error_code_t sample_destroy_context(auth_adaptor_plugin_context_h context)
 	free(context->refresh_token);
 	free(context->uid);
 
-	// Free context
+	/* Free context */
 	free(context);
 
 	return AUTH_ADAPTOR_ERROR_NONE;
@@ -117,13 +116,12 @@ auth_error_code_t sample_destroy_plugin_handle(auth_adaptor_plugin_handle_h hand
 {
 	auth_plugin_sample_debug("Destory sample auth plugin handle");
 
-	if (NULL == handle)
-	{
+	if (NULL == handle) {
 		auth_plugin_sample_error("Invalid argument");
 		return AUTH_ADAPTOR_ERROR_PLUGIN_INTERNAL;
 	}
 
-	// Free
+	/* Free */
 	free(handle->plugin_uri);
 	free(handle);
 
@@ -254,8 +252,8 @@ auth_error_code_t sample_login(auth_adaptor_plugin_context_h context,
 /**
 	* @brief Login to Easy Signup if access token is expired(Get new access token)
 	*
-	* @param[in]	context 	specifies Auth Plugin context
-	* @param[in]	request 	specifies optional request parameter
+	* @param[in]	context		specifies Auth Plugin context
+	* @param[in]	request		specifies optional request parameter
 	* @param[out]	error		specifies error code & message
 	* @param[out]	response	specifies optional response parameter
 	* @return	0 on success, otherwise a positive error value
@@ -307,27 +305,26 @@ EXPORT_API auth_adaptor_plugin_handle_h create_plugin_handle(void)
 	auth_adaptor_plugin_handle_h handle =
 			(auth_adaptor_plugin_handle_h) calloc(1, sizeof(auth_adaptor_plugin_handle_t));
 
-	if (NULL == handle)
-	{
+	if (NULL == handle) {
 		auth_plugin_sample_error("Memory allocation failed");
 		return NULL;
 	}
 
-	// Mandatory functions
+	/* Mandatory functions */
 	handle->create_context		= sample_create_context;
 	handle->destroy_context		= sample_destroy_context;
 	handle->destroy_handle		= sample_destroy_plugin_handle;
 	handle->set_listener		= sample_register_listener;
 	handle->unset_listener		= sample_unregister_listener;
 
-	// Optional functions
+	/* Optional functions */
 	handle->is_auth			= sample_is_auth;
 	handle->login			= sample_login;
 	handle->join			= sample_join;
 	handle->refresh_access_token	= sample_refresh_access_token;
 	handle->get_server_info		= sample_get_server_info;
 
-	// Plugin name
+	/* Plugin name */
 	handle->plugin_uri = strdup(SAMPLE_PACKAGE_NAME);
 
 	return handle;
