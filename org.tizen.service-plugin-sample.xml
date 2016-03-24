@@ -10,12 +10,4 @@
 		<label xml:lang="ko-kr">plugin sample</label>
 		<metadata key="service-adaptor" value="service plugin sample"/>
 	</service-application>
-	<account>
-		<account-provider appid="org.tizen.service-plugin-sample" multiple-accounts-support="true" providerid="plugin sample">
-			<icon section="account">org.tizen.service-plugin-sample.png</icon>
-			<icon section="account-small">org.tizen.service-plugin-sample.png</icon>
-			<label>plugin sample</label>
-			<capability>http://tizen.org/account/capability/sa</capability>
-		</account-provider>
-	</account>
 </manifest>
