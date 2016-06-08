@@ -353,12 +353,10 @@ storage_error_code_t sample_make_directory(storage_adaptor_plugin_context_h cont
 	storage_plugin_sample_debug("Make directory");
 
 	char *path = NULL;
-	if (!parent_path) {
-		if (0 == strncmp(VIRTUAL_ROOT_PATH(context), parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
-			path = g_strconcat(VIRTUAL_ROOT_PATH(context), folder_name, NULL);
-		else
-			path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path ? parent_path : "", "/", folder_name, NULL);
-	}
+	if (!parent_path && 0 == strncmp(VIRTUAL_ROOT_PATH(context), parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
+		path = g_strconcat(VIRTUAL_ROOT_PATH(context), folder_name, NULL);
+	else
+		path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path ? parent_path : "", "/", folder_name, NULL);
 	storage_plugin_sample_debug("Make path (%s)", path);
 	int ret = mkdir(path, 0777);
 	storage_plugin_sample_debug("Make path (%d)", ret);
@@ -401,12 +399,10 @@ storage_error_code_t sample_remove_directory(storage_adaptor_plugin_context_h co
 	storage_plugin_sample_debug("Remove directory");
 
 	char *path = NULL;
-	if (!folder_name) {
-		if (0 == strncmp(VIRTUAL_ROOT_PATH(context), parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
-			path = g_strconcat(VIRTUAL_ROOT_PATH(context), folder_name, NULL);
-		else
-			path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path ? parent_path : "", "/", folder_name, NULL);
-	}
+	if (!parent_path && 0 == strncmp(VIRTUAL_ROOT_PATH(context), parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
+		path = g_strconcat(VIRTUAL_ROOT_PATH(context), folder_name, NULL);
+	else
+		path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path ? parent_path : "", "/", folder_name, NULL);
 	storage_plugin_sample_debug("Remove path (%s)", path);
 	int ret = remove(path);
 	storage_plugin_sample_debug("Remove ret (%d)", ret);
@@ -475,12 +471,10 @@ storage_error_code_t sample_get_list(storage_adaptor_plugin_context_h context,
 	storage_plugin_sample_debug("parent_path (%s) folder_name(%s)", parent_path, folder_name);
 
 	char *path = NULL;
-	if (!parent_path) {
-		if (0 == strncmp(VIRTUAL_ROOT_PATH(context), parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
-			path = g_strconcat(VIRTUAL_ROOT_PATH(context), folder_name, NULL);
-		else
-			path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path ? parent_path : "", "/", folder_name, NULL);
-	}
+	if (!parent_path && 0 == strncmp(VIRTUAL_ROOT_PATH(context), parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
+		path = g_strconcat(VIRTUAL_ROOT_PATH(context), folder_name, NULL);
+	else
+		path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path ? parent_path : "", "/", folder_name, NULL);
 
 	storage_plugin_sample_debug("gets path (%s)", path);
 
@@ -598,12 +592,10 @@ storage_error_code_t sample_upload_file_sync(storage_adaptor_plugin_context_h co
 		return STORAGE_ADAPTOR_ERROR_PLUGIN_INTERNAL;
 
 	char *path = NULL;
-	if (!dir_path) {
-		if (0 == strncmp(VIRTUAL_ROOT_PATH(context), dir_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
-			path = g_strconcat(VIRTUAL_ROOT_PATH(context), file_name, NULL);
-		else
-			path = g_strconcat(VIRTUAL_ROOT_PATH(context), dir_path ? dir_path : "", "/", file_name, NULL);
-	}
+	if (!dir_path && 0 == strncmp(VIRTUAL_ROOT_PATH(context), dir_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
+		path = g_strconcat(VIRTUAL_ROOT_PATH(context), file_name, NULL);
+	else
+		path = g_strconcat(VIRTUAL_ROOT_PATH(context), dir_path ? dir_path : "", "/", file_name, NULL);
 	storage_plugin_sample_info("dir path: (%s)", dir_path);
 	storage_plugin_sample_info("file name: (%s)", file_name);
 
@@ -668,12 +660,10 @@ storage_error_code_t sample_download_file_sync(storage_adaptor_plugin_context_h 
 	storage_plugin_sample_debug("Download file synchronously");
 
 	char *path = NULL;
-	if (!dir_path) {
-		if (0 == strncmp(VIRTUAL_ROOT_PATH(context), dir_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
-			path = g_strconcat(VIRTUAL_ROOT_PATH(context), file_name, NULL);
-		else
-			path = g_strconcat(VIRTUAL_ROOT_PATH(context), dir_path ? dir_path : "", "/", file_name, NULL);
-	}
+	if (!dir_path && 0 == strncmp(VIRTUAL_ROOT_PATH(context), dir_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
+		path = g_strconcat(VIRTUAL_ROOT_PATH(context), file_name, NULL);
+	else
+		path = g_strconcat(VIRTUAL_ROOT_PATH(context), dir_path ? dir_path : "", "/", file_name, NULL);
 
 	int src = open(path, O_RDONLY);
 	if (0 > src) {
@@ -734,12 +724,10 @@ storage_error_code_t sample_delete_file(storage_adaptor_plugin_context_h context
 	storage_plugin_sample_debug("Remove file");
 
 	char *path = NULL;
-	if (!parent_path) {
-		if (0 == strncmp(VIRTUAL_ROOT_PATH(context), parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
-			path = g_strconcat(VIRTUAL_ROOT_PATH(context), file_name, NULL);
-		else
-			path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path ? parent_path : "", "/", file_name, NULL);
-	}
+	if (!parent_path && 0 == strncmp(VIRTUAL_ROOT_PATH(context), parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
+		path = g_strconcat(VIRTUAL_ROOT_PATH(context), file_name, NULL);
+	else
+		path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path ? parent_path : "", "/", file_name, NULL);
 	storage_plugin_sample_debug("Remove path (%s)", path);
 	int ret = remove(path);
 	storage_plugin_sample_debug("Remove ret (%d)", ret);
@@ -813,20 +801,16 @@ storage_error_code_t sample_move_file(storage_adaptor_plugin_context_h context,
 	storage_plugin_sample_debug("Move file");
 
 	char *old_path = NULL, *new_path = NULL;
-	if (!parent_path) {
-		if (0 == strncmp(VIRTUAL_ROOT_PATH(context), parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
-			old_path = g_strconcat(VIRTUAL_ROOT_PATH(context), file_name, NULL);
-		else
-			old_path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path ? parent_path : "", "/", file_name, NULL);
-	}
+	if (!parent_path && 0 == strncmp(VIRTUAL_ROOT_PATH(context), parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
+		old_path = g_strconcat(VIRTUAL_ROOT_PATH(context), file_name, NULL);
+	else
+		old_path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path ? parent_path : "", "/", file_name, NULL);
 	storage_plugin_sample_debug("Old path (%s)", old_path);
 
-	if (!dest_parent_path) {
-		if (0 == strncmp(VIRTUAL_ROOT_PATH(context), dest_parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
-			new_path = g_strconcat(VIRTUAL_ROOT_PATH(context), new_file_name, NULL);
-		else
-			new_path = g_strconcat(VIRTUAL_ROOT_PATH(context), dest_parent_path ? dest_parent_path : "", "/", new_file_name, NULL);
-	}
+	if (!dest_parent_path && 0 == strncmp(VIRTUAL_ROOT_PATH(context), dest_parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
+		new_path = g_strconcat(VIRTUAL_ROOT_PATH(context), new_file_name, NULL);
+	else
+		new_path = g_strconcat(VIRTUAL_ROOT_PATH(context), dest_parent_path ? dest_parent_path : "", "/", new_file_name, NULL);
 	storage_plugin_sample_debug("New path (%s)", new_path);
 
 	int ret = rename(old_path, new_path);
@@ -873,20 +857,16 @@ storage_error_code_t sample_move_directory(storage_adaptor_plugin_context_h cont
 	storage_plugin_sample_debug("Move directory");
 
 	char *old_path = NULL, *new_path = NULL;
-	if (!parent_path) {
-		if (0 == strncmp(VIRTUAL_ROOT_PATH(context), parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
-			old_path = g_strconcat(VIRTUAL_ROOT_PATH(context), folder_name, NULL);
-		else
-			old_path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path ? parent_path : "", "/", folder_name, NULL);
-	}
+	if (!parent_path && 0 == strncmp(VIRTUAL_ROOT_PATH(context), parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
+		old_path = g_strconcat(VIRTUAL_ROOT_PATH(context), folder_name, NULL);
+	else
+		old_path = g_strconcat(VIRTUAL_ROOT_PATH(context), parent_path ? parent_path : "", "/", folder_name, NULL);
 	storage_plugin_sample_debug("Old path (%s)", old_path);
 
-	if (!dest_parent_path) {
-		if (0 == strncmp(VIRTUAL_ROOT_PATH(context), dest_parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
-			new_path = g_strconcat(VIRTUAL_ROOT_PATH(context), new_folder_name, NULL);
-		else
-			new_path = g_strconcat(VIRTUAL_ROOT_PATH(context), dest_parent_path ? dest_parent_path : "", "/", new_folder_name, NULL);
-	}
+	if (!dest_parent_path && 0 == strncmp(VIRTUAL_ROOT_PATH(context), dest_parent_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
+		new_path = g_strconcat(VIRTUAL_ROOT_PATH(context), new_folder_name, NULL);
+	else
+		new_path = g_strconcat(VIRTUAL_ROOT_PATH(context), dest_parent_path ? dest_parent_path : "", "/", new_folder_name, NULL);
 	storage_plugin_sample_debug("New path (%s)", new_path);
 
 	int ret = rename(old_path, new_path);
@@ -1164,12 +1144,11 @@ storage_error_code_t sample_download_thumbnail(storage_adaptor_plugin_context_h 
 	printf("thumbnail size : %d\n", thumbnail_size);
 
 	char *path = NULL;
-	if (!folder_path) {
-		if (0 == strncmp(VIRTUAL_ROOT_PATH(context), folder_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
-			path = g_strconcat(VIRTUAL_ROOT_PATH(context), file_name, NULL);
-		else
-			path = g_strconcat(VIRTUAL_ROOT_PATH(context), folder_path ? folder_path : "", "/", file_name, NULL);
-	}
+	if (!folder_path && 0 == strncmp(VIRTUAL_ROOT_PATH(context), folder_path, strlen(VIRTUAL_ROOT_PATH(context)) - 1))
+		path = g_strconcat(VIRTUAL_ROOT_PATH(context), file_name, NULL);
+	else
+		path = g_strconcat(VIRTUAL_ROOT_PATH(context), folder_path ? folder_path : "", "/", file_name, NULL);
+
 	int src = open(path, O_RDONLY);
 	if (0 > src) {
 		free(path);
