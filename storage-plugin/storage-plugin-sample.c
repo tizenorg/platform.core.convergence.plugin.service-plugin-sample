@@ -434,14 +434,16 @@ char *replace_path_str(char *original)
 
 	char *temp1 = NULL, *temp2 = NULL;
 
-	while (NULL != (pt = strstr(base, slash))) {
-		temp1 = strndup(base, strlen(base) - strlen(pt));
-		temp2 = strndup(pt + 1, strlen(pt) - 1);
-		free(base);
-		base = g_strconcat(temp1, temp2, NULL);
-		free(temp1);
-		free(temp2);
-		temp1 = temp2 = NULL;
+	if (NULL != base) {
+		while (NULL != (pt = strstr(base, slash))) {
+			temp1 = strndup(base, strlen(base) - strlen(pt));
+			temp2 = strndup(pt + 1, strlen(pt) - 1);
+			free(base);
+			base = g_strconcat(temp1, temp2, NULL);
+			free(temp1);
+			free(temp2);
+			temp1 = temp2 = NULL;
+		}
 	}
 
 	return base;
